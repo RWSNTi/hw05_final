@@ -1,0 +1,18 @@
+{% extends "includes/base.html" %}
+{% block title %}Последние обновления у авторов{% endblock %}
+{% block header %}Последние обновления у читаемых авторов{% endblock %}
+{% block content %}
+{% include "includes/menu.html" %}
+
+{% load cache %}
+{% cache 20 follow_page %}
+
+    {% for post in page %}
+     {% include "includes/post_item.html" with post=post %}
+    {% endfor %}
+
+    {% endcache %} 
+
+    {% include "includes/paginator.html" %}
+
+{% endblock %}

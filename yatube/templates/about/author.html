@@ -1,0 +1,53 @@
+<style type="text/css">
+  #center {
+   margin: 0 auto;
+   text-align: center;
+  }
+</style>
+{% extends "includes/base.html" %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+{% load user_filters %}
+  <main role="main" class="container">
+    <div class="row">
+      <!-- Левый вспомогательный блок -->
+      <div class="col-md-3 mb-3 mt-1">
+        <div class="card">
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <div class="h3">
+                  Об авторе сего проекта
+                </div> 
+              </li>
+              <li class="list-group-item">
+                <div class="h6 text-muted">
+                  Если очень хочется, и есть немного времени, то возможно всё
+                </div>
+              </li>
+            </ul>                                               
+          </div>                    
+        </div>                
+      </div>
+      <!-- Тело страницы -->
+      <div class="col-md-9">
+        <div class="card-body">                    
+          <div class="card-text">
+           <div id="center">
+            <p>Проект живёт тут: <a href="https://github.com/RWSNTi" target="_blank" rel="noopener noreferrer">Github</a></p>
+            <p>Об авторе проекта в каталогизированном виде: <a href="https://vk.com/id871656" target="_blank" rel="noopener noreferrer">VK</a></p></p>
+            <p>Резюме?<br>
+              <img src="https://pbs.twimg.com/media/D3LCnTBXkAAZ8Gq.jpg" 
+              width="75" height="75" alt="lorem_kitsum"></a>
+            </p><br>
+            <div id="centerbottomLayer">
+             <i>Когда рабочая кружка работает лучше тебя..<i><br>
+            <img src="https://i.ibb.co/f99VjXN/Cuphead-Conductor.png" 
+              width="200" height="300" alt="cuphead"></a>
+           </div>
+          </div>                    
+        </div>                
+      </div>            
+    </div>        
+  </main>
+{% endblock %}

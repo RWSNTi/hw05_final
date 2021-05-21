@@ -1,0 +1,42 @@
+<!-- templates/about/author.html -->
+{% extends "includes/base.html" %}
+{% block title %}О технологиях{% endblock %}
+{% block content %}
+{% load user_filters %}
+  <main role="main" class="container">
+    <div class="row">
+      <!-- Левый вспомогательный блок -->
+      <div class="col-md-4 mb-4 mt-1">
+        <div class="card">
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">
+                <div class="h3">
+                 Технологии, применённые при создании проекта  
+                </div> 
+              </li>
+              <li class="list-group-item">
+                <div class="h6 text-muted">
+                  Полезный короткий текст
+                </div>
+              </li>
+            </ul>                                               
+          </div>                    
+        </div>                
+      </div>
+      <!-- Тело страницы -->
+      <div class="col-md-5">
+        <div class="card-body">                    
+          <div class="card-text">
+            <p>Применяя гугл-технологию, можно раздобыть немного знаний о Python, <br>
+               html, Django, SQL и других интересных вещах.<br>
+               Хотя Джанго тяжело идет.
+               <br>
+               <br>Помогает опыт структурирования задач.    
+            </p>
+          </div>                    
+        </div>                
+      </div>            
+    </div>        
+  </main>
+{% endblock %}
