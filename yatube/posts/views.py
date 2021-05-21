@@ -70,7 +70,7 @@ def add_comment(request, username, post_id):
 @login_required
 def new_post(request):
     context = {"header": "Добавить запись", "button": "Добавить"}
-    if request.method == 'POST':
+    if request.method == "POST":
         form = PostForm(request.POST, files=request.FILES or None)
         if form.is_valid():
             post = form.save(commit=False)
@@ -130,11 +130,11 @@ def profile_follow(request, username):
         Follow.objects.get_or_create(user=request.user,
                                      author=User.objects.get(
                                          username=username))
-    return redirect('profile', username=username)
+    return redirect("profile", username=username)
 
 
 @login_required
 def profile_unfollow(request, username):
     Follow.objects.get(user=request.user,
                        author=User.objects.get(username=username)).delete()
-    return redirect('profile', username=username)
+    return redirect("profile", username=username)
