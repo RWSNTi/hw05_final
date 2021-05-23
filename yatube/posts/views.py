@@ -130,20 +130,18 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    if User.objects.filter(username=username).exists() is True:
-        if request.user.username != username:
-            Follow.objects.get_or_create(user=request.user,
-                                         author=User.objects.get(
-                                             username=username))
-        return redirect("profile", username=username)
-    return redirect("index")
+    get_object_or_404(User, username=username)
+    if request.user.username != username:
+        Follow.objects.get_or_create(user=request.user,
+                                     author=User.objects.get(
+                                         username=username))
+    return redirect("profile", username=username)
 
 
 @login_required
 def profile_unfollow(request, username):
-    if User.objects.filter(username=username).exists() is True:
-        Follow.objects.get(
-            user=request.user,
-            author=User.objects.get(username=username)).delete()
-        return redirect("profile", username=username)
-    return redirect("index")
+    get_object_or_404(User, username=username)
+    Follow.objects.get(
+        user=request.user,
+        author=User.objects.get(username=username)).delete()
+    return redirect("profile", username=username)

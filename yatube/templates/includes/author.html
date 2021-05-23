@@ -22,7 +22,7 @@
            <li class="list-group-item">
           <!--Напрямую через шаблон логика if author == user.username не срабатывает-->
             {% if author == auth_user %}
-            {% elif Follow %}
+            {% elif follow %}
               <a
                 class="btn btn-lg btn-light"
                 href={% url "profile_unfollow" author %} role="button">
