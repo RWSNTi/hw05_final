@@ -36,24 +36,18 @@ class PostCreateFormTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # Модуль shutil - библиотека Python с прекрасными инструментами
-        # для управления файлами и директориями:
-        # создание, удаление, копирование, перемещение, изменение папок|файлов
-        # Метод shutil.rmtree удаляет директорию и всё её содержимое
         shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
 
     def setUp(self):
-        # Создаём неавторизованный клиент
         self.guest_client = Client()
-        # Создаём авторизованный клиент
         self.user1 = User.objects.get(username="testuser2")
         self.authorized_client1 = Client()
         self.authorized_client1.force_login(self.user1)
 
     def test_create_new_post(self):
         """Валидная форма создает запись в Post."""
-        # Подсчитаем количество записей в Task
+        # Подсчитаем количество записей в Post
         posts_count = Post.objects.count()
         # Подготавливаем данные для передачи в форму
         form_data = {
@@ -79,7 +73,7 @@ class PostCreateFormTests(TestCase):
 
     def test_create_new_post_with_image(self):
         """Валидная форма создает запись в Post с изображением."""
-        # Подсчитаем количество записей в Task
+        # Подсчитаем количество записей в Post
         posts_count = Post.objects.count()
         # Подготавливаем данные для передачи в форму
         small_gif = (
@@ -120,7 +114,7 @@ class PostCreateFormTests(TestCase):
 
     def test_edit_existing_post(self):
         """Валидная форма редактирует запись в Post."""
-        # Подсчитаем количество записей в Task
+        # Подсчитаем количество записей в Post
         posts_count = Post.objects.count()
         # загружаем данные поста, переданные в форму
         response = self.authorized_client1.get(

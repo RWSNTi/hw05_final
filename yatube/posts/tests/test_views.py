@@ -235,20 +235,28 @@ class PostPagesTests(TestCase):
         response3_content = response3.content
         self.assertNotEqual(response1_content, response3_content)
 
-    def test_auth_user_can_sign_up_and_unsign_back(self):
+    def test_auth_user_can_sign_up(self):
         """Проверяем, что пользователь может подписаться на другого
-        пользователя и отписаться обратно"""
+        пользователя"""
         user1_follower_count = PostPagesTests.user1.follower.count()
         self.authorized_client1.get(
             reverse("profile_follow",
                     kwargs={"username": self.user2.username}))
         user1_following_count_2 = PostPagesTests.user1.follower.count()
         self.assertEqual(user1_following_count_2, user1_follower_count + 1)
+
+    def test_auth_user_can_unsign(self):
+        """Проверяем, что пользователь может отписаться
+         от другого пользователя"""
+        self.authorized_client1.get(
+            reverse("profile_follow",
+                    kwargs={"username": self.user2.username}))
+        user1_follower_count = PostPagesTests.user1.follower.count()
         self.authorized_client1.get(
             reverse("profile_unfollow",
                     kwargs={"username": self.user2.username}))
-        user1_following_count_3 = PostPagesTests.user1.follower.count()
-        self.assertEqual(user1_following_count_3, user1_follower_count)
+        user1_following_count_2 = PostPagesTests.user1.follower.count()
+        self.assertEqual(user1_following_count_2, user1_follower_count - 1)
 
     def test_followers_see_followed_author_s_post(self):
         """Новая запись пользователя появляется в ленте тех, кто на него
@@ -258,25 +266,34 @@ class PostPagesTests(TestCase):
         self.authorized_client1.get(
             reverse("profile_follow",
                     kwargs={"username": self.user3.username}))
-        self.authorized_client2.get(
-            reverse("profile_follow",
-                    kwargs={"username": self.user1.username}))
         follow_1_index_user1 = self.authorized_client1.get(
             reverse("follow_index"))
-        follow_1_index_user2 = self.authorized_client2.get(
-            reverse("follow_index"))
         follow_post1 = follow_1_index_user1.context["page"][0].text
-        follow_post_user2_1 = follow_1_index_user2.context["page"][0].text
         new_post_text = "Тестовый новый текст user3"
         Post.objects.create(
             text=new_post_text, author=self.user3, group=self.group)
         follow_2_index_user1 = self.authorized_client1.get(
             reverse("follow_index"))
+        follow_post2 = follow_2_index_user1.context["page"][0].text
+        self.assertNotEqual(follow_post2, follow_post1)
+
+    def test_users_dont_see_not_followed_author_s_post(self):
+        """Новая запись пользователя появляется не появляется
+         в ленте тех, кто не подписан на него."""
+        Post.objects.create(
+            text="Тестовый текст user3", author=self.user3, group=self.group)
+        self.authorized_client2.get(
+            reverse("profile_follow",
+                    kwargs={"username": self.user1.username}))
+        follow_1_index_user2 = self.authorized_client2.get(
+            reverse("follow_index"))
+        follow_post_user2_1 = follow_1_index_user2.context["page"][0].text
+        new_post_text = "Тестовый новый текст user3"
+        Post.objects.create(
+            text=new_post_text, author=self.user3, group=self.group)
         follow_2_index_user2 = self.authorized_client2.get(
             reverse("follow_index"))
         follow_post_user2_2 = follow_2_index_user2.context["page"][0].text
-        follow_post2 = follow_2_index_user1.context["page"][0].text
-        self.assertNotEqual(follow_post2, follow_post1)
         self.assertEqual(follow_post_user2_2, follow_post_user2_1)
 
 
@@ -318,10 +335,6 @@ class PostImagesTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        # Модуль shutil - библиотека Python с прекрасными инструментами
-        # для управления файлами и директориями:
-        # создание, удаление, копирование, перемещение, изменение папок|файлов
-        # Метод shutil.rmtree удаляет директорию и всё её содержимое
         shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
         super().tearDownClass()
 

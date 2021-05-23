@@ -27,6 +27,7 @@ def group_posts(request, slug):
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     author_posts = author.posts.all()
+    auth_user = request.user
     post_count = author_posts.count()
     follow = Follow.objects.filter(user_id=request.user.id
                                    ).filter(author_id=author.id)
@@ -35,22 +36,24 @@ def profile(request, username):
     page = paginator.get_page(page_number)
     return render(request, "profile.html",
                   {"author": author, "post_count": post_count, "page": page,
-                   "follow": follow}
+                   "follow": follow, "auth_user": auth_user}
                   )
 
 
 def post_view(request, username, post_id):
     post = get_object_or_404(Post, id=post_id, author__username=username)
+    auth_user = request.user
     comments = post.comments.all()
     author = post.author
     author_posts = author.posts.all()
     post_count = author_posts.count()
     follow = Follow.objects.filter(user_id=request.user.id
-                                   ).filter(author_id=author.id)
+                                   ).filter(author_id=author.id).exists()
     form = CommentForm(request.POST or None)
     return render(request, "post.html",
                   {"post": post, "author": author, "post_count": post_count,
-                   "comments": comments, "form": form, "follow": follow}
+                   "comments": comments, "form": form, "follow": follow,
+                   "auth_user": auth_user}
                   )
 
 
@@ -63,7 +66,6 @@ def add_comment(request, username, post_id):
         comment.author = request.user
         comment.post = post
         comment.save()
-        print(comment.id)
     return redirect("post", username=username, post_id=post_id)
 
 
@@ -103,6 +105,7 @@ def post_edit(request, username, post_id):
 
 
 def page_not_found(request, exception):
+    # подключено в головном url файле папки yatube через handler404
     return render(
         request,
         "misc/404.html",
@@ -112,6 +115,7 @@ def page_not_found(request, exception):
 
 
 def server_error(request):
+    # подключено в головном url файле папки yatube через handler500
     return render(request, "misc/500.html", status=500)
 
 
@@ -126,15 +130,20 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    if request.user.username != username:
-        Follow.objects.get_or_create(user=request.user,
-                                     author=User.objects.get(
-                                         username=username))
-    return redirect("profile", username=username)
+    if User.objects.filter(username=username).exists() is True:
+        if request.user.username != username:
+            Follow.objects.get_or_create(user=request.user,
+                                         author=User.objects.get(
+                                             username=username))
+        return redirect("profile", username=username)
+    return redirect("index")
 
 
 @login_required
 def profile_unfollow(request, username):
-    Follow.objects.get(user=request.user,
-                       author=User.objects.get(username=username)).delete()
-    return redirect("profile", username=username)
+    if User.objects.filter(username=username).exists() is True:
+        Follow.objects.get(
+            user=request.user,
+            author=User.objects.get(username=username)).delete()
+        return redirect("profile", username=username)
+    return redirect("index")

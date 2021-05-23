@@ -37,15 +37,16 @@ class PostURLTests(TestCase):
         self.authorized_client.force_login(self.user)
         self.authorized_client2.force_login(self.user2)
 
-    def test_unauth_user_redirects_to_login_after_new(self):
+    def test_unauth_user_redirects_to_login_after_var_requests(self):
         """Страницы создания поста, комментирования не доступны
-         неавторизованному пользователю, делают редирект"""
+         неавторизованному пользователю, подписки делают редирект"""
         pages = {
             "/auth/login/?next=/new/": "/new/",
             f"/auth/login/?next=/{PostURLTests.user1.username}/"
             f"{PostURLTests.post.id}/comment":
             f"/{PostURLTests.user1.username}/"
             f"{PostURLTests.post.id}/comment",
+            "/auth/login/?next=/follow/": "/follow/",
         }
         for redirect_url, url in pages.items():
             with self.subTest(url=url):
@@ -70,6 +71,8 @@ class PostURLTests(TestCase):
             "main": "/",
             "profile": f"/{PostURLTests.user1.username}/",
             "group_page": f"/group/{PostURLTests.group.slug}/",
+            "follow": "/follow/",
+            "post": f"/{PostURLTests.user1.username}/{PostURLTests.post.id}/",
         }
         for page, url in pages.items():
             with self.subTest(url=url):
@@ -122,13 +125,26 @@ class PostURLTests(TestCase):
         response_auth2 = self.authorized_client2.get(f"{url}edit/")
         self.assertRedirects(response_auth2, url)
 
+    def test_user_post_comment_redirect_auth_to_users_post(self):
+        """Страница /<username>/<post_id>/comment редиректит на пост"""
+        url = (f"/{PostURLTests.user1.username}/"
+               f"{PostURLTests.post.id}/comment")
+        response_auth2 = self.authorized_client2.get(url, follow=True)
+        self.assertRedirects(response_auth2,
+                             f"/{PostURLTests.user1.username}/"
+                             f"{PostURLTests.post.id}/")
+
     # Проверка вызываемых шаблонов для каждого адреса
     def test_urls_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
         templates_url_names = {
+            "follow.html": "/follow/",
+            "group.html": f"/group/{PostURLTests.group.slug}/",
             "index.html": "/",
             "new.html": "/new/",
-            "group.html": f"/group/{PostURLTests.group.slug}/",
+            "post.html":
+            f"/{PostURLTests.user1.username}/{PostURLTests.post.id}/",
+            "profile.html": f"/{PostURLTests.user1.username}/",
         }
         for template, url in templates_url_names.items():
             with self.subTest(url=url):

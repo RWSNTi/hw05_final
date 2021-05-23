@@ -29,7 +29,12 @@ class Post(models.Model):
         blank=True, null=True,
         help_text="Укажите группу для размещения записи"
     )
-    image = models.ImageField(upload_to="posts/", blank=True, null=True)
+    image = models.ImageField(
+        upload_to="posts/",
+        blank=True,
+        null=True,
+        help_text="Добавьте картинку к записи"
+    )
 
     class Meta:
         ordering = ["-pub_date"]

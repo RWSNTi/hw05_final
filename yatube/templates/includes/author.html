@@ -20,18 +20,20 @@
               </div>
            </li>
            <li class="list-group-item">
-            {% if follow %}
+          <!--Напрямую через шаблон логика if author == user.username не срабатывает-->
+            {% if author == auth_user %}
+            {% elif Follow %}
               <a
                 class="btn btn-lg btn-light"
                 href={% url "profile_unfollow" author %} role="button">
                 Отписаться
-              </a>
+            </a>
             {% else %}
-              <a
-                class="btn btn-lg btn-primary"
-                href={% url "profile_follow" author %} role="button">
-                Подписаться
-              </a>
+            <a
+              class="btn btn-lg btn-primary"
+              href={% url "profile_follow" author %} role="button">
+              Подписаться
+            </a>
             {% endif %}
           </li> 
           

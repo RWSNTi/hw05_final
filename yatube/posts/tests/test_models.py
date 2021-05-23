@@ -68,8 +68,6 @@ class GroupModelTest(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        # Создаём тестовую запись в БД и
-        # сохраняем ее в качестве переменной класса
         cls.group = Group.objects.create(
             title="ж" * 10,
             description="описание тестовой группы"
