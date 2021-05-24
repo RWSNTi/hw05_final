@@ -20,8 +20,7 @@
               </div>
            </li>
            <li class="list-group-item">
-          <!--Напрямую через шаблон логика if author == user.username не срабатывает-->
-            {% if author == auth_user %}
+            {% if user.is_authenticated and author == user %} 
             {% elif follow %}
               <a
                 class="btn btn-lg btn-light"
