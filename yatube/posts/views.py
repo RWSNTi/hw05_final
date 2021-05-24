@@ -35,7 +35,7 @@ def profile(request, username):
     page = paginator.get_page(page_number)
     return render(request, "profile.html",
                   {"author": author, "post_count": post_count, "page": page,
-                   "follow": follow,}
+                   "follow": follow, }
                   )
 
 
@@ -50,7 +50,7 @@ def post_view(request, username, post_id):
     form = CommentForm(request.POST or None)
     return render(request, "post.html",
                   {"post": post, "author": author, "post_count": post_count,
-                   "comments": comments, "form": form, "follow": follow,}
+                   "comments": comments, "form": form, "follow": follow, }
                   )
 
 
