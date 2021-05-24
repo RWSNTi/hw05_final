@@ -27,7 +27,6 @@ def group_posts(request, slug):
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     author_posts = author.posts.all()
-    auth_user = request.user
     post_count = author_posts.count()
     follow = Follow.objects.filter(user_id=request.user.id
                                    ).filter(author_id=author.id)
@@ -36,13 +35,12 @@ def profile(request, username):
     page = paginator.get_page(page_number)
     return render(request, "profile.html",
                   {"author": author, "post_count": post_count, "page": page,
-                   "follow": follow, "auth_user": auth_user}
+                   "follow": follow,}
                   )
 
 
 def post_view(request, username, post_id):
     post = get_object_or_404(Post, id=post_id, author__username=username)
-    auth_user = request.user
     comments = post.comments.all()
     author = post.author
     author_posts = author.posts.all()
@@ -52,8 +50,7 @@ def post_view(request, username, post_id):
     form = CommentForm(request.POST or None)
     return render(request, "post.html",
                   {"post": post, "author": author, "post_count": post_count,
-                   "comments": comments, "form": form, "follow": follow,
-                   "auth_user": auth_user}
+                   "comments": comments, "form": form, "follow": follow,}
                   )
 
 
