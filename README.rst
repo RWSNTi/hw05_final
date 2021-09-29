@@ -11,7 +11,7 @@ Yatube - это сервис, позволяющий зарегистриров�
 
 .. code-block:: text
 
- git clone https://github.com/RWSNTi/hw05_final
+ git clone https://github.com/RWSNTi/hw05_final.git
  cd hw05_final
 
 Cоздать и активировать виртуальное окружение:
