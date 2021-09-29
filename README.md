@@ -1,3 +1,31 @@
-# hw05_final
+**Добро пожаловать в проект Yatube!**
+Это сервис, позволяющий зарегистрированным пользователям вести онлайн-блоги - оставлять на своей странице записи, дополнять их изображениями. Так же зарегистрированные пользователи могут оставлять комментарии под чужими и своими записями, подписываться на интересующих их авторов. Так же есть возможность постить записи в тематических группах.
 
-[![CI](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml/badge.svg?branch=master)](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml)
+**Как запустить проект:**
+Клонировать репозиторий и перейти в него в командной строке:
+
+git clone https://github.com/RWSNTi/hw05_final
+
+Перейти в созданный репозиторий:
+cd hw05_final
+
+Cоздать и активировать виртуальное окружение:
+
+python -m venv venv
+source venv/scripts/activate для Win или source/bin/activate для Unix-систем
+
+Обновить установщик расширений pip
+python -m pip install --upgrade pip
+
+Установить зависимости из файла requirements.txt:
+
+pip install -r requirements.txt
+Выполнить миграции:
+
+python manage.py migrate
+
+Запустить проект:
+
+python manage.py runserver
+
+Документация с примерами запросов и ответов будет доступна после развёртывания и запуска проекта по ссылке http://127.0.0.1:8000/redoc
