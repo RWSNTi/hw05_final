@@ -1,3 +1,4 @@
+"""Файл содержит основные используемые на сайте модели объектов"""
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -37,6 +38,8 @@ class Post(models.Model):
     )
 
     class Meta:
+        """Сортировка вывода постов на страницах по дате"""
+
         ordering = ["-pub_date"]
 
     def __str__(self):
@@ -93,6 +96,8 @@ class Comment(models.Model):
 
 
 class Follow(models.Model):
+    """Модель, позволяющая пользователям подписываться на других авторов"""
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

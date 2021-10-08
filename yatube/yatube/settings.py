@@ -11,12 +11,16 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-import environ
-env = environ.Env()
-environ.Env.read_env() 
-
+import dotenv
+# import environ
 import sentry_sdk
+import mimetypes
+
+
+
 from sentry_sdk.integrations.django import DjangoIntegration
+# env = environ.Env()
+# environ.Env.read_env()
 
 sentry_sdk.init(
     dsn="https://1cc37e1b834e4a748c76962606823c8a@o1029264.ingest.sentry.io/5996184",
@@ -31,10 +35,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'kvek8s3avx86&=!1=jt+%um_hd^z7in%$1!*hhl*26s8k2^a3m'
+dotenv_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    dotenv.load_dotenv(dotenv_file)
+
+# ключ вынесен в отдельный .env файл
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -46,6 +55,7 @@ ALLOWED_HOSTS = [
     "www.wndr-yatube.tk",
 ]
 
+mimetypes.add_type("text/css", ".css", True)
 
 # Application definition
 
@@ -97,12 +107,15 @@ WSGI_APPLICATION = 'yatube.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+"""На продакшн-сервере используется 'default': env.db(), для PostgreSQL
+   Для локальной настройки штатные параметры Django"""
+
 DATABASES = {
-    'default': env.db(),
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#    }
+    # 'default': env.db(),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
@@ -143,7 +156,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

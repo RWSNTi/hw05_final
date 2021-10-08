@@ -1,9 +1,14 @@
+"""В этом файле находятся модели основных используемых на сайте форм:
+ - создание поста и добавление комментария к посту.
+Поля форм взяты из соответствующих моделей файла models.py"""
 from django import forms
 from .models import Post, Comment
 from django.utils.translation import gettext_lazy as _
 
 
 class PostForm(forms.ModelForm):
+    """Настройки формы для создания и редактирования поста
+    на основе модели поста"""
     class Meta:
         model = Post
         fields = ["text", "group", "image"]
@@ -17,6 +22,8 @@ class PostForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    """Настройки формы для комментариев на основе модели комментариев"""
+
     class Meta:
         model = Comment
         fields = ["text"]

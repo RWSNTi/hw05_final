@@ -6,6 +6,9 @@ User = get_user_model()
 
 
 class CreationForm(UserCreationForm):
+    """Для проекта создана своя форма регистрации пользователей,
+    с сокращённым количеством полей, требующих заполнения."""
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("first_name", "last_name", "username", "email")
